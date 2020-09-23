@@ -12,7 +12,7 @@
 
 (defun facker-disable-map ()
     (interactive)
-    (facker-mode nil))
+    (facker-mode -1))
 
 (define-minor-mode facker-local-mode
   "set up verilog minor mode"
