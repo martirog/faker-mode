@@ -7,8 +7,8 @@
 
     (define-key map (kbd "C-i") 'backward-paragraph)
     (define-key map (kbd "C-k") 'forward-paragraph)
-    (define-key map (kbd "C-j") 'right-word)
-    (define-key map (kbd "C-l") 'left-word)
+    (define-key map (kbd "C-j") 'left-word)
+    (define-key map (kbd "C-l") 'right-word)
 
     (define-key map (kbd "<SPC>") 'facker-disable-map)
     map)
