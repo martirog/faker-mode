@@ -28,9 +28,6 @@
   facker-local-mode
   (lambda () (facker-local-mode t)))
 
-(provide 'facker-local-mode)
-(provide 'facker-mode)
-
 ;; add the facker map to the
 (add-to-list 'emulation-mode-map-alists `((facker-local-mode . ,facker-map))))
 
@@ -40,3 +37,6 @@
   (facker-local-mode -1))
 
 (add-hook 'minibuffer-setup-hook #'facker-turn-off-local-mode)
+
+;(provide 'facker-local-mode)
+(provide 'facker-mode)
