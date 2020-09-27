@@ -1,0 +1,15 @@
+* I am a faker
+  I use the arrow key's a LOT. (even after a decade of emacs)
+  This is as we all know a big no no.
+  I can try to explain it away whit the fact that I was introduced to the hovly land
+  after the keyboards all had arrow keys. But I have seen the xkcd and read the posts.
+  so this is me hiding my dependency on the arrows(and it was fun to see how this should be done).
+
+* the keys
+  i: up
+  j: left
+  k: down
+  l: right
+
+  there is more and I'll add it here later. but you should not use this as it is only an attempt
+  on customization for the sake of trying it
