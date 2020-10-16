@@ -17,8 +17,8 @@
 
     (define-key map (kbd "h") 'facker-insert-text)
 
-    (define-key map (kbd "w") 'diff-buffer-with-file)
-    (define-key map (kbd "d") 'kill-line)
+    (define-key map (kbd "w") 'ispell-word)
+    (define-key map (kbd "d") 'diff-buffer-with-file)
     (define-key map (kbd "q") 'quit-window)
     (define-key map (kbd "a") 'mark-word)
     (define-key map (kbd "r") 'string-rectangle)
@@ -29,18 +29,56 @@
     (define-key map (kbd "v") 'vc-dir)
     (define-key map (kbd "b") 'vc-ediff)
 
-    (define-key map (kbd "<return>") 'facker-disable-map)
+    ;(define-key map (kbd "<return>") 'facker-disable-map)
     map)
   "key map in active facker mode")
 
-(defvar facker-activate nil "controlling the facker mode map")
+(defvar-local faker-prewview-state nil)
+(defvar faker-prewview-window nil)
 
 (defun facker-disable-map ()
     (interactive)
     (facker-mode -1))
 
+(defun faker-insert-erase-prewview ()
+  "remove faker fild texst"
+  (with-selected-window faker-prewview-window ;use the correct window here
+    (if (equal (get-text-property (- (point) 1) 'field) 'faker-prewview)
+        (delete-field))
+    (insert (nth 2 faker-prewview-state))))
+
+(defun faker-insert-prewview ()
+  (let* ((pre-view (propertize (minibuffer-contents) 'field 'faker-prewview))
+         (pre-view-length (length pre-view)))
+    (message pre-view)
+    (with-selected-window faker-prewview-window ;use the correct window here
+      (if (eq (get-text-property (- (point) 1) 'field) 'faker-prewview)
+          (delete-field))
+      (unless (equal pre-view-length 0)
+        (message pre-view)
+        (insert pre-view)))))  ; insert preview
+
 (defun facker-insert-text (text)
-  (interactive "s")
+  "insert single line text while still in faker mode"
+  (interactive
+   (progn
+     (make-local-variable 'faker-prewview-state)
+     (let (start end)
+       (if (use-region-p)
+           (setq start (region-beginning)
+                 end (region-beginning)
+                 start-string (delete-and-extract-region (region-beginning) (region-end)))
+         (setq start (point)
+               end (point)
+               start-string nil))
+       (setq faker-prewview-state `(,start ,end ,start-string))
+       (setq faker-prewview-window (selected-window))
+       (list
+        (minibuffer-with-setup-hook
+           (lambda ()
+             (add-hook 'minibuffer-exit-hook #'faker-insert-erase-prewview nil t)
+             (add-hook 'post-command-hook #'faker-insert-prewview nil t))
+         (read-string "faker-insert: ")))))) ; need to add histrory here
   (insert text))
 
 (define-minor-mode facker-local-mode
