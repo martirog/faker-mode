@@ -29,7 +29,7 @@
     (define-key map (kbd "v") 'vc-dir)
     (define-key map (kbd "b") 'vc-ediff)
 
-    ;(define-key map (kbd "<return>") 'facker-disable-map)
+    (define-key map (kbd "ø") 'facker-disable-map)
     map)
   "key map in active facker mode")
 
@@ -78,7 +78,10 @@
            (lambda ()
              (add-hook 'minibuffer-exit-hook #'faker-insert-erase-prewview nil t)
              (add-hook 'post-command-hook #'faker-insert-prewview nil t))
-         (read-string "faker-insert: ")))))) ; need to add histrory here
+          (read-string "faker-insert: ")))))) ; need to add histrory here
+
+  (if (use-region-p)
+      (delete-and-extract-region (region-beginning) (region-end)))
   (insert text))
 
 (define-minor-mode facker-local-mode
