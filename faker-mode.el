@@ -1,4 +1,4 @@
-(defvar facker-map  (let ((map (make-sparse-keymap)))
+(defvar faker-map  (let ((map (make-sparse-keymap)))
     (suppress-keymap map t)
     (define-key map (kbd "i") 'previous-line)
     (define-key map (kbd "k") 'next-line)
@@ -15,7 +15,7 @@
     (define-key map (kbd "<SPC> j") 'windmove-left)
     (define-key map (kbd "<SPC> l") 'windmove-right)
 
-    (define-key map (kbd "h") 'facker-insert-text)
+    (define-key map (kbd "h") 'faker-insert-text)
 
     (define-key map (kbd "w") 'ispell-word)
     (define-key map (kbd "d") 'diff-buffer-with-file)
@@ -29,16 +29,16 @@
     (define-key map (kbd "v") 'vc-dir)
     (define-key map (kbd "b") 'vc-ediff)
 
-    (define-key map (kbd "ø") 'facker-disable-map)
+    (define-key map (kbd "ø") 'faker-disable-map)
     map)
-  "key map in active facker mode")
+  "key map in active faker mode")
 
 (defvar-local faker-prewview-state nil)
 (defvar faker-prewview-window nil)
 
-(defun facker-disable-map ()
+(defun faker-disable-map ()
     (interactive)
-    (facker-mode -1))
+    (faker-mode -1))
 
 (defun faker-insert-erase-prewview ()
   "remove faker fild texst"
@@ -58,8 +58,8 @@
         (message pre-view)
         (insert pre-view)))))  ; insert preview
 
-(defun facker-insert-text (text)
-  "insert single line text while still in faker mode"
+(defun faker-insert-text (text)
+  "insert single line text while still in faker mode"va
   (interactive
    (progn
      (make-local-variable 'faker-prewview-state)
@@ -84,23 +84,23 @@
       (delete-and-extract-region (region-beginning) (region-end)))
   (insert text))
 
-(define-minor-mode facker-local-mode
+(define-minor-mode faker-local-mode
   "set up verilog minor mode"
   :lighter " f"
 
-  ;; add the facker map to the
-  (add-to-list 'emulation-mode-map-alists `((facker-local-mode . ,facker-map))))
+  ;; add the faker map to the
+  (add-to-list 'emulation-mode-map-alists `((faker-local-mode . ,faker-map))))
 
-(define-globalized-minor-mode facker-mode
-  facker-local-mode
-  (lambda () (facker-local-mode t)))
+(define-globalized-minor-mode faker-mode
+  faker-local-mode
+  (lambda () (faker-local-mode t)))
 
 ;; Turn off the minor mode in the minibuffer
-(defun facker-turn-off-local-mode ()
+(defun faker-turn-off-local-mode ()
   "Turn off my-mode."
-  (facker-local-mode -1))
+  (faker-local-mode -1))
 
-(add-hook 'minibuffer-setup-hook #'facker-turn-off-local-mode)
+(add-hook 'minibuffer-setup-hook #'faker-turn-off-local-mode)
 
-;(provide 'facker-local-mode)
-(provide 'facker-mode)
+;(provide 'faker-local-mode)
+(provide 'faker-mode)
