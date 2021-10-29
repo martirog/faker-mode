@@ -66,7 +66,7 @@
      (let (start end)
        (if (use-region-p)
            (setq start (region-beginning)
-                 end (region-beginning)
+                 end (region-end)
                  start-string (delete-and-extract-region (region-beginning) (region-end)))
          (setq start (point)
                end (point)
