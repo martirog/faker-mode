@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t -*-
+
 (defvar faker-map  (let ((map (make-sparse-keymap)))
     (suppress-keymap map t)
     (define-key map (kbd "i") 'previous-line)
@@ -33,21 +35,21 @@
     map)
   "key map in active faker mode")
 
-(defvar-local faker-prewview-state nil)
-(defvar faker-prewview-window nil)
+(setq faker-prewview-state nil)
+(setq faker-prewview-window nil)
 
 (defun faker-disable-map ()
     (interactive)
     (faker-mode -1))
 
-(defun faker-insert-erase-prewview ()
+(defun faker--insert-erase-prewview ()
   "remove faker fild texst"
   (with-selected-window faker-prewview-window ;use the correct window here
     (if (equal (get-text-property (- (point) 1) 'field) 'faker-prewview)
         (delete-field))
     (insert (nth 2 faker-prewview-state))))
 
-(defun faker-insert-prewview ()
+(defun faker--insert-prewview ()
   (let* ((pre-view (propertize (minibuffer-contents) 'field 'faker-prewview))
          (pre-view-length (length pre-view)))
     (message pre-view)
@@ -59,7 +61,7 @@
         (insert pre-view)))))  ; insert preview
 
 (defun faker-insert-text (text)
-  "insert single line text while still in faker mode"va
+  "insert single line text while still in faker mode"
   (interactive
    (progn
      (make-local-variable 'faker-prewview-state)
@@ -76,31 +78,30 @@
        (list
         (minibuffer-with-setup-hook
            (lambda ()
-             (add-hook 'minibuffer-exit-hook #'faker-insert-erase-prewview nil t)
-             (add-hook 'post-command-hook #'faker-insert-prewview nil t))
+             (add-hook 'minibuffer-exit-hook #'faker--insert-erase-prewview nil t)
+             (add-hook 'post-command-hook #'faker--insert-prewview nil t))
           (read-string "faker-insert: ")))))) ; need to add histrory here
 
   (if (use-region-p)
       (delete-and-extract-region (region-beginning) (region-end)))
   (insert text))
 
-(define-minor-mode faker-local-mode
+(define-minor-mode faker--local-mode
   "set up verilog minor mode"
   :lighter " f"
 
   ;; add the faker map to the
-  (add-to-list 'emulation-mode-map-alists `((faker-local-mode . ,faker-map))))
+  (add-to-list 'emulation-mode-map-alists `((faker--local-mode . ,faker-map))))
 
 (define-globalized-minor-mode faker-mode
-  faker-local-mode
-  (lambda () (faker-local-mode t)))
+  faker--local-mode
+  (lambda () (faker--local-mode t)))
 
 ;; Turn off the minor mode in the minibuffer
-(defun faker-turn-off-local-mode ()
+(defun faker--turn-off-local-mode ()
   "Turn off my-mode."
-  (faker-local-mode -1))
+  (faker--local-mode -1))
 
-(add-hook 'minibuffer-setup-hook #'faker-turn-off-local-mode)
+(add-hook 'minibuffer-setup-hook #'faker--turn-off-local-mode)
 
-;(provide 'faker-local-mode)
 (provide 'faker-mode)
